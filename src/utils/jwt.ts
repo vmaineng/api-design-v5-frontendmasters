@@ -22,27 +22,3 @@ export const generateToken = async (payload: JwtPayload): Promise<string> => {
     .setExpirationTime(env.JWT_EXPIRES_IN || '7d')
     .sign(secretKey)
 }
-
-export const verifyToken = async (token: string): Promise<JwtPayload> => {
-  const secretKey = createSecretKey(env.JWT_SECRET, 'utf-8')
-  const { payload } = await jwtVerify(token, secretKey)
-
-  return {
-    id: payload.id as string,
-    email: payload.email as string,
-    username: payload.username as string,
-  }
-}
-
-export const decodeToken = (token: string): JwtPayload | null => {
-  try {
-    const payload = decodeJwt(token)
-    return {
-      id: payload.id as string,
-      email: payload.email as string,
-      username: payload.username as string,
-    }
-  } catch {
-    return null
-  }
-}
