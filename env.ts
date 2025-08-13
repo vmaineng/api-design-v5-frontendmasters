@@ -49,7 +49,7 @@ try {
     console.error('Invalid env var')
     console.error(JSON.stringify(e.flatten().fieldErrors, null, 2)) //format with spaces of two
 
-    e.errors.forEach((err) => {
+    e.issues.forEach((err) => {
       const path = err.path.join('.')
       console.error(`  ${path}: ${err.message}`)
     })
@@ -61,7 +61,7 @@ try {
 
 export const isProd = () => env.APP_STAGE === 'production'
 export const isDev = () => env.APP_STAGE === 'dev'
-export const isTesting = () => env.APP_STAGE === 'test'
+export const isTestingEnv = () => env.APP_STAGE === 'test'
 
 export { env }
 export default env
