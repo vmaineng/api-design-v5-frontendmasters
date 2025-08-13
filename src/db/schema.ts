@@ -8,6 +8,7 @@ import {
   integer,
 } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm' //helps make M2M tables
+import { createInsertSchema, createSelectSchema} from 'drizzle-zod'
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -102,3 +103,15 @@ export const habitTagsRelations = relations(habitTags, ({ one }) => ({
     references: [tags.id],
   }),
 }))
+
+export type User = typeof users.$inferSelect //inferring that type
+export type Habit = typeof habits.$inferSelect //inferring that type
+export type Entry = typeof entries.$inferSelect //inferring that type
+export type Tag = typeof tags.$inferSelect //inferring that type
+export type HabitTag = typeof habitTags.$inferSelect //inferring that type
+
+//validate inputs using Zod
+export const insertUserSchema = createInsertSchema(users) //Zod Schema used to validate at runtime
+export const selectUserSchema = createSelectSchema(users) //get back from querying a user at runtime
+
+
