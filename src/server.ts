@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes.ts'
 import habitRoutes from './routes/habitRoutes.ts'
 import userRoutes from './routes/userRoutes.ts'
 import morgan from 'morgan'
+import { errorHandler } from './middleware/errorHandler.ts'
 
 const app = express()
 
@@ -47,20 +48,7 @@ app.use((req, res) => {
 })
 
 // Global error handler
-app.use(
-  (
-    err: Error,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    console.error(err.stack)
-    res.status(500).json({
-      error: 'Something went wrong!',
-      ...(isDev() && { details: err.message }),
-    })
-  }
-)
+app.use(errorHandler)
 
 export { app }
 
