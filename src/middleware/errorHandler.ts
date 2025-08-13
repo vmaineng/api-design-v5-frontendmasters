@@ -29,18 +29,6 @@ export const errorHandler = (
     message = 'Unauthorized'
   }
 
-  if (err.code === '23505') {
-    // PostgreSQL unique violation
-    status = 409
-    message = 'Resource already exists'
-  }
-
-  if (err.code === '23503') {
-    // PostgreSQL foreign key violation
-    status = 400
-    message = 'Invalid reference'
-  }
-
   res.status(status).json({
     error: message,
     ...(env.APP_STAGE === 'dev' && {
