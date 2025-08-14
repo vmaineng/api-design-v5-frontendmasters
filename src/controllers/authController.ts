@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import { db } from '../db/connection.ts'
-import { users, type NewUser, } from '../db/schema.ts'
+import { users, type NewUser } from '../db/schema.ts'
 import { generateToken } from '../utils/jwt.ts'
 import { comparePasswords, hashPassword } from '../utils/passwords.ts'
 import { eq } from 'drizzle-orm'
@@ -46,35 +46,44 @@ export const register = async (
 }
 
 export const logging = async (req: Request, res: Response) => {
-    try { 
-        const {email, body} = req.body
-        const user = await db.query.users.findFirst({
-            where: eq(users.email, email),
-        })
+  try {
+    const { email, body } = req.body
+    const user = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    })
 
-        if (!user) {
-            return res.status(401).json({
-                error: 'Invalid credentials'
-            })
-        }
-
-
-        const isValidatedPassword = await comparePasswords(password, user.password)
-
-        if (!isValidatedPassword) { 
-            return res.status(401).json({error: 'Invalid credentials'})
-        } //better to terminate early instead of checking if it is true
-
-        const token = wait generateToken({
-            id: user.id,
-            email: user.email,
-            username: user.username
-        })
-        return res.json({
-            message: 'Login success',
-            user: 
-        }).status(201)
-    } catch(e) {
-
+    if (!user) {
+      return res.status(401).json({
+        error: 'Invalid credentials',
+      })
     }
+
+    const isValidatedPassword = await comparePasswords(password, user.password)
+
+    if (!isValidatedPassword) {
+      return res.status(401).json({ error: 'Invalid credentials' })
+    } //better to terminate early instead of checking if it is true
+
+    const token = await generateToken({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    })
+    return res
+      .json({
+        message: 'Login success',
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          createdAt: user.createdAt,
+        },
+      })
+      .status(201)
+  } catch (e) {
+    console.error('Logging error', e)
+    res.status(500).json({error: 'Failed to login'})
+  }
 }
