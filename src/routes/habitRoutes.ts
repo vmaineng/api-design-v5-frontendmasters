@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { validateBody, validateParams } from '../middleware/validation.ts'
 import {z} from 'zod';
 import { authenticateToken } from '../middleware/auth.ts';
-import { createHabit, getUserHabits } from '../controllers/habitController.ts';
+import { createHabit, getUserHabits, updateHabit } from '../controllers/habitController.ts';
 
 const createHabitSchema = z.object({
     name: z.string(),
@@ -29,8 +29,9 @@ router.get("/:id", (req, res) => {
     res.json({message: 'get one habit'})
 })
 
-router.post("/", validateBody(createHabitSchema), createHabit
-}) //before you can run this code, this middleware is going to be sent first
+router.patch('/:id', updateHabit)
+
+router.post("/", validateBody(createHabitSchema), createHabit) //before you can run this code, this middleware is going to be sent first
 //if multiple middleware, can put them in arrays
 
 router.delete("/:id", (req, res) => { 
