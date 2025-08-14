@@ -6,6 +6,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import helmet from 'helmet'
 import { isTestingEnv } from '../env.ts';
+import { errorHandler } from './middleware/errorHandler.ts';
 
 const app = express()
 app.use(helmet()) //uses it more in higher order functions to pass in options
@@ -27,6 +28,8 @@ app.use('/api/auth', authRoutes)
 
 app.use('/api/users', userRoutes)
 app.use('/api/habits', habitRoutes)
+
+app.use(errorHandler) //global handler
 
 export {app}
 export default app
