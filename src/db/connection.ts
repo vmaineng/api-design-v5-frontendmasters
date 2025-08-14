@@ -3,7 +3,6 @@ import {Pool} from 'pg'
 import * as schema from './schema.ts'
 import { env, isProd} from '../../env.ts'
 import { remember} from '@epic-web/remember';
-import { connect } from 'http2';
 
 const createPool = () => {
     return new Pool({
