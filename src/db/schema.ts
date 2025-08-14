@@ -114,4 +114,3 @@ export type HabitTag = typeof habitTags.$inferSelect //inferring that type
 export const insertUserSchema = createInsertSchema(users) //Zod Schema used to validate at runtime
 export const selectUserSchema = createSelectSchema(users) //get back from querying a user at runtime
 
-
