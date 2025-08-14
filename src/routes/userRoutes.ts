@@ -3,7 +3,7 @@ import { authenticateToken } from '../middleware/auth.ts'
 
 const router = Router()
 
-router.use(authenticateToken)
+router.use(authenticateToken) //middleware
 
 router.get("/", (req, res) => { 
     res.json({message: 'users'})
